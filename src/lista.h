@@ -3,15 +3,15 @@
 
 #include "biblioteca.h"
 
-typedef struct ELEMENTO
+typedef struct ELEMENTO_LISTA
 {
     LIVRO livro;
-    struct ELEMENTO* prox;
-} ELEMENTO;
+    struct ELEMENTO_LISTA* prox;
+} ELEMENTO_LISTA;
 
 typedef struct LISTA 
 {
-    ELEMENTO* inicio;
+    ELEMENTO_LISTA* inicio;
     int tamanho;
 } LISTA;
 
