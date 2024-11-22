@@ -4,7 +4,7 @@
 #include "biblioteca.h"
 
 typedef struct ELEMENTO_FILA {
-    LIVRO livro;
+    PESSOA pessoa;
     struct ELEMENTO_FILA* prox;
 } ELEMENTO_FILA;
 
@@ -14,6 +14,31 @@ typedef struct FILA {
     int tamanho;
 } FILA;
 
-// Funções para manipular a fila
+typedef struct PESSOA {
+    char nome[MAX];
+} PESSOA;
 
+// Funções para manipular a fila
+void inicializarFila(FILA *f){
+    f->frente = NULL;
+    f->tras = NULL;
+    f->tamanho = 0;
+}
+
+ void enfileiramento(FILA *f, PESSOA p){
+    ELEMENTO_FILA *novo = malloc(sizeof(ELEMENTO_FILA));
+    if(novo == NULL) {
+        printf("Erro de alocacao de memoria\n");
+        return;
+    }else {
+        novo->pessoa = p;
+        novo->prox = NULL;
+        if(f->frente == NULL) {
+            f->frente = novo;
+        } else {
+            f->tras->prox = novo;
+        }
+        f->tras = novo;
+    }
+ }
 #endif // FILA_H
