@@ -1,13 +1,49 @@
 #ifndef BIBLIOTECA_H
 #define BIBLIOTECA_H
-#define MAX 100
+#include <stdbool.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+
+#define print_error(x) fprintf(stderr, "%s\n", x) 
+
+#define OUT_OF_RANGE "Index out of range"
+#define EMPTY_LIST "List is empty"
+#define MALLOC_ERR "Error at allocating dynamic space"
+
+
 typedef struct LIVRO 
 {
-    char titulo[MAX];
-    char autor[MAX];
+    char *titulo;
+    char *autor;
     int ano_publicacao;
-    char isbn[13]; // 13 caracteres para ISBN-13
-    int status;    // 0 = disponível, 1 = emprestado
+    char isbn[15]; // 13 caracteres para ISBN-13
+    bool disponivel;    // true = disponível, falso = emprestado
 } LIVRO;
 
+#ifdef BIBLIOTECA_IMPLEMENTATION
+
+void print_LIVRO(LIVRO l)
+{
+    fprintf(stdout, "Titulo: %s\nAutor: %s\nAno de Publicacao: %d\nISBN: %s\nDisponivel? %s\n"
+            , l.titulo, l.autor, l.ano_publicacao, l.isbn, l.disponivel ? "sim" : "nao");
+}
+
+LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
+{
+    LIVRO *new = (LIVRO *) malloc(sizeof(LIVRO));
+    if (new == NULL) {
+        print_error(MALLOC_ERR);
+        return NULL;
+    }
+    new->titulo = strdup(titulo);
+    new->autor = strdup(autor);
+    strcpy(new->isbn, ISBN);
+    new->ano_publicacao = ano;
+    new->disponivel = true;
+    return new;
+}
+
+#endif // BIBLIOTECA_IMPLEMENTATION
 #endif // BIBLIOTECA_H
