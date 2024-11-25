@@ -22,6 +22,9 @@ typedef struct LIVRO
     bool disponivel;    // true = disponível, falso = emprestado
 } LIVRO;
 
+LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano);
+void print_LIVRO(LIVRO l);
+
 #ifdef BIBLIOTECA_IMPLEMENTATION
 
 void print_LIVRO(LIVRO l)

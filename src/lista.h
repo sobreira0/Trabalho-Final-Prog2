@@ -14,6 +14,10 @@ typedef struct {
 
 // Funções para manipular a LISTA
 
+bool insert_LISTA(List *l, LIVRO *data, size_t pos);
+bool delete_LISTA(List *l, LIVRO *livro, size_t pos);
+void print_LISTA(List *l);
+
 #ifdef LISTA_IMPLEMENTATION
 
 bool insert_LISTA(List *l, LIVRO *data, size_t pos)
@@ -26,15 +30,17 @@ bool insert_LISTA(List *l, LIVRO *data, size_t pos)
     }
     
     new->data = data;
+    new->next = NULL;  // Garantir que o próximo nó seja NULL
 
     if (pos == 1) {
-        l->head = new;
+        new->next = l->head;  // Novo nó aponta para o antigo primeiro nó
+        l->head = new;        // A cabeça da lista é o novo nó
         return true;
     }
     
     Node *temp = l->head;
  
-    for (size_t i = 1; temp != NULL && i < pos-1; ++i) {
+    for (size_t i = 1; temp != NULL && i < pos-2; ++i) {
         temp = temp->next;
     }
     
@@ -44,10 +50,11 @@ bool insert_LISTA(List *l, LIVRO *data, size_t pos)
         return false;
     }
  
-    new->next = temp->next;
-    temp->next = new;
+    new->next = temp->next;  // Novo nó aponta para o próximo nó do anterior
+    temp->next = new;        // O nó anterior aponta para o novo nó
     return true;
 }
+
 
 bool delete_LISTA(List *l, LIVRO *livro, size_t pos)
 {
@@ -87,11 +94,12 @@ void print_LISTA(List *l)
     while (n != NULL) {
         printf("*---------------------*\n");
         printf("Elemento %d:\n", i);
-        print_LIVRO(*(n->data));
+        print_LIVRO(*(n->data));  
         n = n->next;
         i++;
     }
 }
+
 
 #endif // LISTA_IMPLEMENTATION
 #endif // LISTA_H
