@@ -12,7 +12,7 @@ void mergeSort_LISTA(Node** headRef);
 
 #ifdef UTILS_IMPLEMENTATION
 
-// Função para dividir a lista em duas partes
+
 void split_lista(Node* source, Node** frontRef, Node** backRef) 
 {
     // Se a lista tiver menos de 2 elementos
@@ -25,7 +25,7 @@ void split_lista(Node* source, Node** frontRef, Node** backRef)
     Node* slow = source;
     Node* fast = source->next;
 
-    // Mover 'fast' duas vezes mais rápido que 'slow'
+    
     while (fast != NULL && fast->next != NULL) {
         slow = slow->next;
         fast = fast->next->next;
@@ -37,7 +37,7 @@ void split_lista(Node* source, Node** frontRef, Node** backRef)
     slow->next = NULL;  // Quebra a lista em duas partes
 }
 
-// Função para mesclar duas listas ordenadas
+
 Node* sortedMerge(Node* a, Node* b)
 {
     Node* result = NULL;
@@ -49,10 +49,10 @@ Node* sortedMerge(Node* a, Node* b)
     // Comparar os títulos das obras em ordem alfabética
     if (strcmp(a->data->titulo, b->data->titulo) <= 0) {
         result = a;
-        result->next = sortedMerge(a->next, b);  // Recursão para mesclar
+        result->next = sortedMerge(a->next, b);  
     } else {
         result = b;
-        result->next = sortedMerge(a, b->next);  // Recursão para mesclar
+        result->next = sortedMerge(a, b->next);  
     }
 
     return result;
@@ -70,17 +70,10 @@ void mergeSort_LISTA(Node** headRef)
         return;
     }
 
-    printf("Dividindo a lista...\n");
-    split_lista(head, &a, &b);  // Divide a lista
-
-    printf("Ordenando recursivamente a primeira metade...\n");
-    mergeSort_LISTA(&a);  // Ordena recursivamente a primeira metade
-
-    printf("Ordenando recursivamente a segunda metade...\n");
-    mergeSort_LISTA(&b);  // Ordena recursivamente a segunda metade
-
-    printf("Mesclando as duas metades ordenadas...\n");
-    *headRef = sortedMerge(a, b);  // Mescla as duas metades ordenadas
+    split_lista(head, &a, &b);  
+    mergeSort_LISTA(&a);  
+    mergeSort_LISTA(&b); 
+    *headRef = sortedMerge(a, b);  
 }
 
 #endif
