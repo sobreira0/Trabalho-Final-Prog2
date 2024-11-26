@@ -14,9 +14,9 @@ typedef struct {
 
 // Funções para manipular a LISTA
 
-bool insert_LISTA(List *l, LIVRO *data, size_t pos);
-bool delete_LISTA(List *l, LIVRO *livro, size_t pos);
-void print_LISTA(List *l);
+bool insert_LISTA(List*, LIVRO*, size_t);
+bool delete_LISTA(List*, LIVRO*, size_t);
+void print_LISTA(List*);
 
 #ifdef LISTA_IMPLEMENTATION
 
@@ -30,17 +30,16 @@ bool insert_LISTA(List *l, LIVRO *data, size_t pos)
     }
     
     new->data = data;
-    new->next = NULL;  // Garantir que o próximo nó seja NULL
 
-    if (pos == 1) {
-        new->next = l->head;  // Novo nó aponta para o antigo primeiro nó
-        l->head = new;        // A cabeça da lista é o novo nó
+    if (pos == 0) {
+        new->next = l->head;  
+        l->head = new;        
         return true;
     }
     
     Node *temp = l->head;
  
-    for (size_t i = 1; temp != NULL && i < pos-2; ++i) {
+    for (size_t i = 0; temp != NULL && i < pos-1; ++i) {
         temp = temp->next;
     }
     
@@ -50,8 +49,8 @@ bool insert_LISTA(List *l, LIVRO *data, size_t pos)
         return false;
     }
  
-    new->next = temp->next;  // Novo nó aponta para o próximo nó do anterior
-    temp->next = new;        // O nó anterior aponta para o novo nó
+    new->next = temp->next; 
+    temp->next = new;        
     return true;
 }
 
@@ -63,14 +62,14 @@ bool delete_LISTA(List *l, LIVRO *livro, size_t pos)
         return false;
     }
     Node *temp = l->head;
-    if (pos == 1) {
+    if (pos == 0) {
         *livro = *(temp->data);
         l->head = temp->next;
         free(temp);
         return true;
     }
     Node *prev;
-    for (size_t i = 1; temp != NULL && i < pos-1; ++i) {
+    for (size_t i = 0; temp != NULL && i < pos-1; ++i) {
         prev = temp;
         temp = temp->next;
     }
