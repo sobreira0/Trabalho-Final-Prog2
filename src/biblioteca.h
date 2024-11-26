@@ -6,7 +6,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#define print_error(x) fprintf(stderr, "%s\n", x) 
+#define print_error(x)                                                          \
+        do {                                                                    \
+            fprintf(stderr, "%s: linha: %s - %s\n", __FILE__, __LINE__, x);     \
+        } while (0)
+        
+                           
 
 #define OUT_OF_RANGE "Index out of range"
 #define EMPTY_LIST "List is empty"
@@ -22,8 +27,8 @@ typedef struct LIVRO
     bool disponivel;    // true = disponível, falso = emprestado
 } LIVRO;
 
-LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano);
-void print_LIVRO(LIVRO l);
+LIVRO* create_LIVRO(char*, char*, char*, int);
+void print_LIVRO(LIVRO);
 
 #ifdef BIBLIOTECA_IMPLEMENTATION
 
@@ -40,6 +45,7 @@ LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
         print_error(MALLOC_ERR);
         return NULL;
     }
+
     new->titulo = strdup(titulo);
     new->autor = strdup(autor);
     strcpy(new->isbn, ISBN);
