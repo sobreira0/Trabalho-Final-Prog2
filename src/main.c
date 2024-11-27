@@ -30,11 +30,11 @@ int main() {
 
     // Ordena a lista por título (merge sort)
     
-    // mergeSort_LISTA(&minhaLista.head);
+     mergeSort_LISTA(&minhaLista.head);
     
-    // // Imprimir lista após a ordenação
-    // printf("\nLista apos ordenar por titulo:\n");
-    // print_LISTA(&minhaLista);
+     // Imprimir lista após a ordenação
+    printf("\nLista apos ordenar por titulo:\n");
+    print_LISTA(&minhaLista);
 
     return 0;
 }
