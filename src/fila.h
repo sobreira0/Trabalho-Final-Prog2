@@ -3,21 +3,18 @@
 
 #include "biblioteca.h"
 
-typedef struct ELEMENTO_FILA 
-{
+typedef struct ELEMENTO_FILA {
     PESSOA pessoa;
     struct ELEMENTO_FILA* prox;
 } ELEMENTO_FILA;
 
-typedef struct FILA 
-{
+typedef struct FILA {
     ELEMENTO_FILA* frente;
     ELEMENTO_FILA* tras;
     int tamanho;
 } FILA;
 
-typedef struct PESSOA 
-{
+typedef struct PESSOA {
     char nome[MAX];
 } PESSOA;
 
