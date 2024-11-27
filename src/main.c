@@ -6,35 +6,51 @@
 #include "lista.h"
 #include "utils.h"
 
+int main() 
+{
+    FILE *arquivo_livro = fopen("livros.txt", "r");
+    if (arquivo_livro == NULL) 
+    {
+        perror("Erro ao abrir o arquivo");
+        return 1;
+    }
 
-
-int main() {
-    // Criação da lista
-    List minhaLista = {0};
-
-    // Livros para adicionar na lista
-    LIVRO *livro1 = create_LIVRO("Senhor dos Aneis", "J.R.R. Tolkien", "123-4567890123", 1954);
-    LIVRO *livro2 = create_LIVRO("O Hobbit", "J.R.R. Tolkien", "987-6543210123", 1937); 
-    LIVRO *livro3 = create_LIVRO("A Revolucao dos Bichos", "George Orwell", "192-8374650123", 1945);
-    LIVRO *livro4 = create_LIVRO("1984", "George Orwell", "564-7382910123", 1949);
-
-    // Inserção dos livros na lista
-    insert_LISTA(&minhaLista, livro1, 0);
-    insert_LISTA(&minhaLista, livro2, 1);
-    insert_LISTA(&minhaLista, livro3, 2);
-    insert_LISTA(&minhaLista, livro4, 3);
-
-    // Imprimir lista antes da ordenação
-    printf("Lista antes de ordenar:\n");
-    print_LISTA(&minhaLista);
-
-    // Ordena a lista por título (merge sort)
     
-    mergeSort_LISTA(&minhaLista.head);
+    List* lista = (List*) malloc(sizeof(List));
+    if (lista == NULL) {
+        print_error(MALLOC_ERR);
+        return 1;
+    }
+    lista->head = NULL;  // Inicializa a lista com head como NULL
+
+    LIVRO *livro;
+    int contador = 0;
+
+    // Loop para ler todos os livros até o final do arquivo
+    while ((livro = ler_livro(arquivo_livro)) != NULL)
+    {
+        insert_LISTA(lista, livro, contador);
+        contador++;
+    }
+
+    // Exibe a lista
+    printf("Sua lista de livros:\n");
+    print_LISTA(lista);
     
-    // Imprimir lista após a ordenação
-    printf("\nLista apos ordenar por titulo:\n");
-    print_LISTA(&minhaLista);
+    // Fechar o arquivo
+    fclose(arquivo_livro);
+    
+    // Liberar a memória alocada para a lista
+    Node *n = lista->head;
+    while (n != NULL) {
+        Node *temp = n;
+        n = n->next;
+        free(temp->data->titulo);
+        free(temp->data->autor);
+        free(temp->data);
+        free(temp);
+    }
+    free(lista);
 
     return 0;
 }

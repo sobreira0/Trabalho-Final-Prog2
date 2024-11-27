@@ -29,7 +29,7 @@ typedef struct LIVRO
 
 LIVRO* create_LIVRO(char*, char*, char*, int);
 void print_LIVRO(LIVRO);
-
+LIVRO* ler_livro(FILE* arquivo_livro);
 #ifdef BIBLIOTECA_IMPLEMENTATION
 
 void print_LIVRO(LIVRO l)
@@ -54,5 +54,32 @@ LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
     return new;
 }
 
+LIVRO* ler_livro(FILE* arquivo_livro)
+{
+    char linha[500];
+
+    if(fgets(linha, sizeof(linha), arquivo_livro) == NULL)
+    {
+        return NULL;
+    }
+
+    linha[strcspn(linha, "\n")] = 0;
+
+    char titulo[200], autor[200];
+    int ano_publicacao;
+    char isbn[15];
+    int disponivel;
+
+    int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",%d,\"%[^\"]\",%d", titulo, autor, &ano_publicacao, isbn, &disponivel);
+    
+    if(campos_lidos != 5)
+    {
+        return NULL;
+    }
+
+    LIVRO* livro = create_LIVRO(titulo, autor, isbn, ano_publicacao);
+
+    return livro;
+}
 #endif // BIBLIOTECA_IMPLEMENTATION
 #endif // BIBLIOTECA_H
