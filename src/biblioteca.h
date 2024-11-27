@@ -8,7 +8,7 @@
 
 #define print_error(x)                                                          \
         do {                                                                    \
-            fprintf(stderr, "%s: linha: %s - %s\n", __FILE__, __LINE__, x);     \
+            fprintf(stderr, "%s: linha: %d - %s\n", __FILE__, __LINE__, x);     \
         } while (0)
         
                            
