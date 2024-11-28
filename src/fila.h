@@ -2,6 +2,7 @@
 #define FILA_H
 
 #include "biblioteca.h"
+#include "pessoa.h"
 
 typedef struct ELEMENTO_FILA {
     PESSOA pessoa;
@@ -11,14 +12,13 @@ typedef struct ELEMENTO_FILA {
 typedef struct FILA {
     ELEMENTO_FILA* frente;
     ELEMENTO_FILA* tras;
-    int tamanho;
+    size_t tamanho;
 } FILA;
 
-typedef struct PESSOA {
-    char nome[MAX];
-} PESSOA;
-
 // Funções para manipular a fila
+
+#ifdef FILA_IMPLEMENTATION
+
 void inicializarFila(FILA *f)
 {
     f->frente = NULL;
@@ -26,48 +26,57 @@ void inicializarFila(FILA *f)
     f->tamanho = 0;
 }
 
-void enfileiramento(FILA *f, PESSOA p) 
+bool adiciona_FILA(FILA *f, PESSOA p) 
 {
-    ELEMENTO_FILA *novo = malloc(sizeof(ELEMENTO_FILA));
+    ELEMENTO_FILA *novo = (ELEMENTO_FILA*) malloc(sizeof(ELEMENTO_FILA));
+    
     if(novo == NULL) {
-        printf("Erro de alocacao de memoria\n");
-        return;
-    }else {
-        novo->pessoa = p;
-        novo->prox = NULL;
-        if(f->frente == NULL) {
-            f->frente = novo;
-        } else {
-            f->tras->prox = novo;
-        }
-        f->tras = novo;
+        print_error(MALLOC_ERR);
+        return false;
     }
+
+    novo->pessoa = p;
+    novo->prox = NULL;
+
+    if(f->frente == NULL) {
+        f->frente = novo;
+    } else {
+        f->tras->prox = novo;
+    }
+    f->tras = novo;
     f->tamanho++;
+
+    return true;
 }
 
-PESSOA desenfileiramento(FILA *f) 
+bool remove_FILA(FILA *f, PESSOA *p) 
 {
     ELEMENTO_FILA *ptr = f->frente;
-    PESSOA p_escolhida;
+
     if(ptr == NULL) {
         printf("Fila vazia");
-        return;
-    } else {
-        f->frente = f->frente->prox;
-        ptr->prox = NULL;
-        p_escolhida= ptr->pessoa;
-        free(ptr);
-        if(f->frente == NULL) {
-            f->tras = NULL;
-        }
-        return p_escolhida;
+        return false;
     }
+
+    f->frente = f->frente->prox;
+    ptr->prox = NULL;
+    *p = ptr->pessoa;
+
+    free(ptr);
+
+    if(f->frente == NULL) {
+        f->tras = NULL;
+    }
+    
     f->tamanho--;
+    return true;
 }
 
-int tamanhoFila(FILA *f) 
+size_t tamanhoFila(FILA *f) 
 {
     return f->tamanho;
 }
- 
+
+#endif // FILA_IMPLEMENTATION 
+
 #endif // FILA_H
