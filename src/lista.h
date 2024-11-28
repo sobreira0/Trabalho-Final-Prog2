@@ -4,8 +4,8 @@
 #include "biblioteca.h"
 
 typedef struct node{
-    struct node *next; // 8 bytes bytes
-    LIVRO livro; // 8 bytes
+    struct node *next;
+    LIVRO livro;
 } Node;
 
 typedef struct {

@@ -10,11 +10,6 @@
 #include "pessoa.h"
 #include "utils.h"
 
-typedef unsigned int t_flag;
-#define NOT_LOGGED (1 << 0)
-#define USUARIO (1 << 1)
-
-
 int main() 
 {
     FILA pessoas = {0};
@@ -47,8 +42,6 @@ int main()
     char cpf[100] = {0};
     scanf("%s", cpf);
     PESSOA *p = cria_PESSOA(nome, cpf);
-    PESSOA pessoa;
-    memcpy(&pessoa, p, sizeof(PESSOA));
     if(!adiciona_FILA(&pessoas, *p)) return 1;
     
     getchar();
@@ -62,7 +55,6 @@ int main()
         puts("\t2 - Pegar livro emprestado");
         puts("\t3 - Listar livros em ordem alfabetica de titulo");
         scanf("%c", &opt);
-        printf("OPT=%c\n", opt);
         switch (opt)
         {
         case '1':
