@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #define print_error(x)                                                          \
         do {                                                                    \
@@ -16,7 +17,9 @@
 #define OUT_OF_RANGE "Index out of range"
 #define EMPTY_LIST "List is empty"
 #define MALLOC_ERR "Error at allocating dynamic space"
-
+#define PERSON_NOT_FOUND "Error at finding person within the queue"
+#define BOOK_NOT_FOUND "Error at finding book within the list"
+#define MENU_ERROR "Error at menu func"
 
 typedef struct LIVRO 
 {
@@ -29,7 +32,8 @@ typedef struct LIVRO
 
 LIVRO* create_LIVRO(char*, char*, char*, int);
 void print_LIVRO(LIVRO);
-LIVRO* ler_livro(FILE* arquivo_livro);
+LIVRO* ler_livro(FILE*);
+
 #ifdef BIBLIOTECA_IMPLEMENTATION
 
 void print_LIVRO(LIVRO l)
@@ -41,6 +45,7 @@ void print_LIVRO(LIVRO l)
 LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
 {
     LIVRO *new = (LIVRO *) malloc(sizeof(LIVRO));
+
     if (new == NULL) {
         print_error(MALLOC_ERR);
         return NULL;
@@ -51,6 +56,7 @@ LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
     strcpy(new->isbn, ISBN);
     new->ano_publicacao = ano;
     new->disponivel = true;
+    
     return new;
 }
 

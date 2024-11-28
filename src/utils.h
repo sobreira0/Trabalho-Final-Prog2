@@ -47,7 +47,7 @@ Node* sortedMerge(Node* a, Node* b)
     if (b == NULL) return a;
 
     // Comparar os títulos das obras em ordem alfabética
-    if (strcmp(a->data->titulo, b->data->titulo) <= 0) {
+    if (strcmp(a->livro.titulo, b->livro.titulo) <= 0) {
         result = a;
         result->next = sortedMerge(a->next, b);  
     } else {

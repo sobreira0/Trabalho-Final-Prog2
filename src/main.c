@@ -1,56 +1,91 @@
 #define BIBLIOTECA_IMPLEMENTATION
 #define LISTA_IMPLEMENTATION
 #define UTILS_IMPLEMENTATION
+#define FILA_IMPLEMENTATION
+#define PESSOA_IMPLEMENTATION
 
 #include "biblioteca.h"
 #include "lista.h"
+#include "fila.h"
+#include "pessoa.h"
 #include "utils.h"
+
+typedef unsigned int t_flag;
+#define NOT_LOGGED (1 << 0)
+#define USUARIO (1 << 1)
+
 
 int main() 
 {
-    FILE *arquivo_livro = fopen("livros.txt", "r");
+    FILA pessoas = {0};
+    List livros = {0};  
+    inicializarFila(&pessoas);
+
+    const char *livros_path = "../livros.txt";
+    FILE *arquivo_livro = fopen(livros_path, "r+");
+
     if (arquivo_livro == NULL) 
     {
         perror("Erro ao abrir o arquivo");
         return 1;
     }
 
-    
-    List* lista = (List*) malloc(sizeof(List));
-    if (lista == NULL) {
-        print_error(MALLOC_ERR);
-        return 1;
-    }
-    lista->head = NULL;  // Inicializa a lista com head como NULL
-
-    LIVRO *livro;
     int contador = 0;
 
     // Loop para ler todos os livros até o final do arquivo
+    LIVRO *livro;
     while ((livro = ler_livro(arquivo_livro)) != NULL)
     {
-        insert_LISTA(lista, livro, contador);
+        insert_LISTA(&livros, *livro, contador);
         contador++;
     }
 
-    // Exibe a lista
-    printf("Sua lista de livros:\n");
-    print_LISTA(lista);
+    puts("Digite seu nome:");
+    char nome[100] = {0};
+    scanf("%s", nome);
+    puts("Digite seu CPF:");
+    char cpf[100] = {0};
+    scanf("%s", cpf);
+    PESSOA *p = cria_PESSOA(nome, cpf);
+    PESSOA pessoa;
+    memcpy(&pessoa, p, sizeof(PESSOA));
+    if(!adiciona_FILA(&pessoas, *p)) return 1;
     
-    // Fechar o arquivo
-    fclose(arquivo_livro);
-    
-    // Liberar a memória alocada para a lista
-    Node *n = lista->head;
-    while (n != NULL) {
-        Node *temp = n;
-        n = n->next;
-        free(temp->data->titulo);
-        free(temp->data->autor);
-        free(temp->data);
-        free(temp);
-    }
-    free(lista);
+    getchar();
+    char opt = -1;
+    while (opt != 'q') {
+        puts("<-------------------------------->");
+        puts("\tBem vindo a Biblioteca BCC");
+        puts("\tDigite 'q' para sair");
+        puts("\tEscolha uma opcao:");
+        puts("\t1 - Consultar meu livro emprestado");
+        puts("\t2 - Pegar livro emprestado");
+        puts("\t3 - Listar livros em ordem alfabetica de titulo");
+        scanf("%c", &opt);
+        printf("OPT=%c\n", opt);
+        switch (opt)
+        {
+        case '1':
+            if (p->livro_emprestado == NULL) puts("Voce nao tem livros emprestados no momento");
+            else print_LIVRO(*p->livro_emprestado);
+            break;
+        case '2': ;
+            char ISBN[15];
+            puts("Digite a ISBN do livro que deseja pegar emprestado");
+            scanf("%s", ISBN);
+            LIVRO *livro = procura_livro(&livros, ISBN);
+            if (livro == NULL) puts("Nao temos este livro");
+            else empresta_Livro(p, livro);
+            break;
+        case '3': ;
+            List livros_sorted;
+            memcpy(&livros_sorted, &livros, sizeof(List));
+            mergeSort_LISTA(&livros_sorted.head);
+            print_LISTA(&livros_sorted);
+            break;
+        }
+        getchar();
+    } 
 
     return 0;
 }
