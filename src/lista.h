@@ -5,7 +5,7 @@
 
 typedef struct node{
     struct node *next; // 8 bytes bytes
-    LIVRO *data; // 8 bytes
+    LIVRO livro; // 8 bytes
 } Node;
 
 typedef struct {
@@ -14,13 +14,13 @@ typedef struct {
 
 // Funções para manipular a LISTA
 
-bool insert_LISTA(List*, LIVRO*, size_t);
+bool insert_LISTA(List*, LIVRO, size_t);
 bool delete_LISTA(List*, LIVRO*, size_t);
 void print_LISTA(List*);
 
 #ifdef LISTA_IMPLEMENTATION
 
-bool insert_LISTA(List *l, LIVRO *data, size_t pos)
+bool insert_LISTA(List *l, LIVRO data, size_t pos)
 {
     Node* new = (Node *) malloc(sizeof(Node));
     
@@ -29,7 +29,7 @@ bool insert_LISTA(List *l, LIVRO *data, size_t pos)
         return false;
     }
     
-    new->data = data;
+    new->livro = data;
 
     if (pos == 0) {
         new->next = l->head;  
@@ -63,27 +63,23 @@ bool delete_LISTA(List *l, LIVRO *livro, size_t pos)
     }
     Node *temp = l->head;
     if (pos == 0) {
-        *livro = *(temp->data);
         l->head = temp->next;
-        free(temp);
-        return true;
-    }
-    Node *prev;
-    for (size_t i = 0; temp != NULL && i < pos-1; ++i) {
-        prev = temp;
-        temp = temp->next;
+    } else {
+        Node *prev;
+        for (size_t i = 0; temp != NULL && i < pos-1; ++i) {
+            prev = temp;
+            temp = temp->next;
+        }
+        if (temp == NULL) {
+            print_error(OUT_OF_RANGE);
+            return false;
+        }
+        prev->next = temp->next;
     }
 
-    if (temp == NULL) {
-        print_error(OUT_OF_RANGE);
-        return false;
-    }
-    
-    *livro = *(temp->data);
-    prev->next = temp->next;
+    *livro = temp->livro;
     free(temp);
     return true;
-    
 }
 
 void print_LISTA(List *l)
@@ -93,12 +89,23 @@ void print_LISTA(List *l)
     while (n != NULL) {
         printf("*---------------------*\n");
         printf("Elemento %d:\n", i);
-        print_LIVRO(*(n->data));  
+        print_LIVRO(n->livro);  
         n = n->next;
         i++;
     }
 }
 
+LIVRO *procura_livro(List *lista, const char *ISBN)
+{
+    Node *n = lista->head;
+    while (n != NULL && (strcmp(n->livro.isbn, ISBN)) != 0) n = n->next;
+    if (n == NULL) {
+        print_error(BOOK_NOT_FOUND);
+        return NULL;
+    }
+
+    return &n->livro;
+}
 
 #endif // LISTA_IMPLEMENTATION
 #endif // LISTA_H
