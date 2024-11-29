@@ -65,6 +65,11 @@ bool insert_LISTA(List *l, LIVRO data, size_t pos)
 
 bool delete_LISTA(List *l, LIVRO *livro, size_t pos)
 {
+    /**
+     * Deleta um livro numa posicao pos da lista, a posicao pos esta indexada em 0
+     * se a lista estiver vazia, a funcao nao roda, de resto, ela remove um elemento
+     * da lista de acordo com uma Linked List
+     */
     if (l->head == NULL) {
         #ifdef DEBUG
             print_error(EMPTY_LIST);
@@ -120,14 +125,17 @@ void print_LISTA_disponiveis(List *l)
             printf("*---------------------*\n");
             printf("Elemento %d:\n", i);
             print_LIVRO(n->livro);  
-            n = n->next;
             i++;
         }
+        n = n->next;
     }
 }
 
-LIVRO *procura_livro(List *lista, const char *ISBN)
+LIVRO *procura_livro_ISBN(List *lista, const char *ISBN)
 {
+    /**
+     * Procura livro na lista de acordo com a sua ISBN
+     */
     Node *n = lista->head;
     while (n != NULL && (strcmp(n->livro.isbn, ISBN)) != 0) n = n->next;
     if (n == NULL) {

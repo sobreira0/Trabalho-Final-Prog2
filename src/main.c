@@ -35,6 +35,10 @@ int main()
         contador++;
     }
 
+
+    /**
+     * Primeira versao do menu, ainda a ser implementado.
+     */
     puts("Digite seu nome:");
     char nome[100] = {0};
     scanf("%s", nome);
@@ -65,7 +69,7 @@ int main()
             char ISBN[15];
             puts("Digite a ISBN do livro que deseja pegar emprestado");
             scanf("%s", ISBN);
-            LIVRO *livro = procura_livro(&livros, ISBN);
+            LIVRO *livro = procura_livro_ISBN(&livros, ISBN);
             if (livro == NULL) puts("Nao temos este livro");
             else empresta_Livro(p, livro);
             break;

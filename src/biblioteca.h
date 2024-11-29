@@ -6,12 +6,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-
-
-        
-                           
+                    
 #ifdef DEBUG
-
+/**
+ * Nossa parte de logging de erros, com algumas contantes
+ * definidas para termos tracking dos erros em momento de producao
+ */
 #define OUT_OF_RANGE "Index out of range"
 #define EMPTY_LIST "List is empty"
 #define EMPTY_QUEUE "Queue is empty"
@@ -50,6 +50,10 @@ void print_LIVRO(LIVRO l)
 
 LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
 {
+    /**
+     * Cria um livro dinamicamente na memoria, com o status de disponivel
+     * 
+     */
     LIVRO *new = (LIVRO *) malloc(sizeof(LIVRO));
 
     if (new == NULL) {
@@ -72,6 +76,10 @@ LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
 
 LIVRO* ler_livro(FILE* arquivo_livro)
 {
+    /**
+     * Le um livro do arquifvo livros.txt e retorna um endereco
+     * do livro dinamicamente alocado
+     */
     char linha[500];
 
     if(fgets(linha, sizeof(linha), arquivo_livro) == NULL)

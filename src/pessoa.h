@@ -14,6 +14,9 @@ typedef struct {
 
 PESSOA *cria_PESSOA(const char *nome, const char *cpf)
 {
+    /** 
+     * Retorna uma alocacao dinamica de uma estrutura PESSOA 
+     */ 
     PESSOA *p = (PESSOA*) malloc(sizeof(PESSOA));
 
     if (p == NULL) {
@@ -34,6 +37,14 @@ PESSOA *cria_PESSOA(const char *nome, const char *cpf)
 
 bool empresta_Livro(PESSOA *p, LIVRO *l)
 {   
+    /**
+     * A funcao empresta livro define o endereco do livro emprestado como um 
+     * dos campos do usuario, e define o livro como indisponivel
+     * 
+     * Cada pessoa so pode ter apenas 1 livro emprestado por vez
+     * Caso ja tenha um, nao vai conseguir pegar outro 
+     * Caso o livro nao esteja disponivel, tambem nao vai conseguir pegar emprestado
+     */
     if (p->count_livros_emprestados > 0) {
         fprintf(stdout, "%s\n", "Voce ja tem um livro emprestado, devolva-o antes de pegar outro");
         return false;
@@ -52,6 +63,11 @@ bool empresta_Livro(PESSOA *p, LIVRO *l)
 
 bool devolve_Livro(PESSOA *p)
 {
+    /**
+     * Operacao inversa da empresta_LIVRO, caso nao tenha nenhum livro
+     * emprestado, a funcao avisa e retorna falso, de resto, ela devolve
+     * o livro emprestado
+     */
     if (p->livro_emprestado == NULL) {
         fprintf(stdout, "%s\n", "Voce nao tem nenhum livro emprestado no momento");
         return false;
