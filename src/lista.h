@@ -111,6 +111,21 @@ void print_LISTA(List *l)
     }
 }
 
+void print_LISTA_disponiveis(List *l)
+{
+    Node *n = l->head;
+    int i = 1;
+    while (n != NULL) {
+        if (n->livro.disponivel) {
+            printf("*---------------------*\n");
+            printf("Elemento %d:\n", i);
+            print_LIVRO(n->livro);  
+            n = n->next;
+            i++;
+        }
+    }
+}
+
 LIVRO *procura_livro(List *lista, const char *ISBN)
 {
     Node *n = lista->head;
