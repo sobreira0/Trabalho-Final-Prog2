@@ -7,19 +7,25 @@
 #include <string.h>
 #include <unistd.h>
 
-#define print_error(x)                                                          \
-        do {                                                                    \
-            fprintf(stderr, "%s: linha: %d - %s\n", __FILE__, __LINE__, x);     \
-        } while (0)
+
         
                            
+#ifdef DEBUG
 
 #define OUT_OF_RANGE "Index out of range"
 #define EMPTY_LIST "List is empty"
+#define EMPTY_QUEUE "Queue is empty"
 #define MALLOC_ERR "Error at allocating dynamic space"
 #define PERSON_NOT_FOUND "Error at finding person within the queue"
 #define BOOK_NOT_FOUND "Error at finding book within the list"
 #define MENU_ERROR "Error at menu func"
+
+#define print_error(x)                                                          \
+        do {                                                                    \
+            fprintf(stderr, "%s: linha: %d - %s\n", __FILE__, __LINE__, x);     \
+        } while (0)
+
+#endif // DEBUG
 
 typedef struct LIVRO 
 {
@@ -47,7 +53,11 @@ LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
     LIVRO *new = (LIVRO *) malloc(sizeof(LIVRO));
 
     if (new == NULL) {
-        print_error(MALLOC_ERR);
+        #ifdef DEBUG
+            print_error(MALLOC_ERR);
+        #else
+            perror("Erro ao alocar memoria");
+        #endif
         return NULL;
     }
 

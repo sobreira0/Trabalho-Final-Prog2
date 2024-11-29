@@ -31,7 +31,11 @@ bool adiciona_FILA(FILA *f, PESSOA p)
     ELEMENTO_FILA *novo = (ELEMENTO_FILA*) malloc(sizeof(ELEMENTO_FILA));
     
     if(novo == NULL) {
-        print_error(MALLOC_ERR);
+        #ifdef DEBUG
+            print_error(MALLOC_ERR);
+        #else
+            perror("Erro ao alocar memoria");
+        #endif
         return false;
     }
 
@@ -54,7 +58,11 @@ bool remove_FILA(FILA *f, PESSOA *p)
     ELEMENTO_FILA *ptr = f->frente;
 
     if(ptr == NULL) {
-        printf("Fila vazia");
+        #ifdef DEBUG
+            print_error(EMPTY_QUEUE);
+        #else   
+            fprintf(stdout, "%s\n", "Fila esta vazia");
+        #endif
         return false;
     }
 

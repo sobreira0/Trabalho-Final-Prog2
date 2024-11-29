@@ -25,7 +25,11 @@ bool insert_LISTA(List *l, LIVRO data, size_t pos)
     Node* new = (Node *) malloc(sizeof(Node));
     
     if (new == NULL) {
-        print_error(MALLOC_ERR);
+        #ifdef DEBUG
+            print_error(MALLOC_ERR);
+        #else
+            perror("Erro ao alocar memoria");
+        #endif
         return false;
     }
     
@@ -44,7 +48,11 @@ bool insert_LISTA(List *l, LIVRO data, size_t pos)
     }
     
     if (temp == NULL) {
-        print_error(OUT_OF_RANGE);
+        #ifdef DEBUG
+            print_error(OUT_OF_RANGE);
+        #else
+            fprintf(stdout, "%s\n", "Posicao indicada esta alem do alcance da lista");
+        #endif
         free(new);
         return false;
     }
@@ -58,7 +66,11 @@ bool insert_LISTA(List *l, LIVRO data, size_t pos)
 bool delete_LISTA(List *l, LIVRO *livro, size_t pos)
 {
     if (l->head == NULL) {
-        print_error(EMPTY_LIST);
+        #ifdef DEBUG
+            print_error(EMPTY_LIST);
+        #else   
+            fprintf(stdout, "%s\n", "Lista esta vazia");
+        #endif
         return false;
     }
     Node *temp = l->head;
@@ -71,7 +83,11 @@ bool delete_LISTA(List *l, LIVRO *livro, size_t pos)
             temp = temp->next;
         }
         if (temp == NULL) {
-            print_error(OUT_OF_RANGE);
+            #ifdef DEBUG
+                print_error(OUT_OF_RANGE);
+            #else
+                fprintf(stdout, "%s\n", "Posicao indicada esta alem do alcance da lista");
+            #endif
             return false;
         }
         prev->next = temp->next;
@@ -100,7 +116,11 @@ LIVRO *procura_livro(List *lista, const char *ISBN)
     Node *n = lista->head;
     while (n != NULL && (strcmp(n->livro.isbn, ISBN)) != 0) n = n->next;
     if (n == NULL) {
-        print_error(BOOK_NOT_FOUND);
+        #ifdef DEBUG
+            print_error(BOOK_NOT_FOUND);
+        #else 
+            fprintf(stdout, "%s\n", "Livro nao esta cadastrado.");
+        #endif
         return NULL;
     }
 
