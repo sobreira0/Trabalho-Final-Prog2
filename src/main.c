@@ -38,7 +38,7 @@ int main()
     LIVRO *livro;
     while ((livro = ler_livro(arquivo_livro)) != NULL)
     {
-        insert_LISTA(&livros, *livro, contador);
+        insert_LISTA(&livros, livro, contador);
         contador++;
     }
 
@@ -46,7 +46,7 @@ int main()
     PESSOA *pessoa;
     while (( pessoa = ler_pessoa(arquivo_pessoa, &livros)) != NULL)
     {
-        adiciona_FILA(&pessoas, *pessoa);
+        adiciona_FILA(&pessoas, pessoa);
     }
     /**
      * Primeira versao do menu, ainda a ser implementado.
@@ -55,12 +55,13 @@ int main()
     puts("Digite seu nome:");
     char nome[NOME_MAX] = {0};
     scanf("%[^\n]", nome);
+    getchar();
     puts("Digite seu CPF:");
     char cpf[CPF_MAX] = {0};
     scanf("%s", cpf);
     getchar();
     PESSOA *p = cria_PESSOA(nome, cpf);
-    if(!adiciona_FILA(&pessoas, *p)) return 1;
+    if(!adiciona_FILA(&pessoas, p)) return 1;
 
     char opt = -1;
     while (opt != 'q') {
@@ -83,6 +84,7 @@ int main()
             puts("\tc - Ver meu livro emprestado");
             char d;
             scanf("%c", &d);
+            getchar();
             switch (d) {
                 case 'a': ;
                     char ISBN[ISBN_MAX];
@@ -108,22 +110,27 @@ int main()
                         print_LIVRO(p->livro_emprestado);
                     break;
             }
-            getchar();
             break;
         case '2': ;
             char titulo[TITULO_MAX], autor[AUTOR_MAX];
             int ano_publicacao;
             puts("Digite o titulo do livro:");
             scanf("%[^\n]", titulo);
+            getchar();
+
             puts("Digite o autor do livro:");
             scanf("%[^\n]", autor);
+            getchar();
+
             puts("Digite o ano de lancamento do livro");
             scanf("%d", &ano_publicacao);
+
             char ISBN[ISBN_MAX];
             puts("Digite a ISBN do livro que deseja pegar emprestado");
             scanf("%s", ISBN);
             getchar();
             LIVRO *livro = create_LIVRO(titulo, autor, ISBN, ano_publicacao);
+            insert_LISTA(&livros, livro, contador++);
             if (livro == NULL) return 1;
             if(!escrever_livro(arquivo_livro, livro)) return 1;
             break;
@@ -140,6 +147,6 @@ int main()
     } 
 
     fclose(arquivo_livro);
-
+    fclose(arquivo_pessoa);
     return 0;
 }

@@ -97,7 +97,6 @@ LIVRO* ler_livro(FILE* arquivo_livro)
     char titulo[LINHA_MAX/2], autor[LINHA_MAX/2];
     int ano_publicacao;
     char isbn[ISBN_MAX];
-    int disponivel;
 
     int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",%d,\"%[^\"]\"", titulo, autor, &ano_publicacao, isbn);
     if(campos_lidos != 4)
@@ -113,11 +112,11 @@ LIVRO* ler_livro(FILE* arquivo_livro)
 bool escrever_livro(FILE* arquivo_livro, LIVRO* livro)
 {
     char *linha = (char*) malloc(LINHA_MAX * sizeof(char));
-    snprintf(linha, LINHA_MAX, "\"%s\",\"%s\",%d,\"%s\"", 
+    snprintf(linha, LINHA_MAX, "\"%s\",\"%s\",%d,\"%s\"\n", 
                         livro->titulo, livro->autor, livro->ano_publicacao, livro->isbn);
     fseek(arquivo_livro, 0, SEEK_END);
-    int result = fputs(linha, arquivo_livro);
-    if (result == EOF) {
+    size_t result = fwrite(linha, sizeof(char), strlen(linha), arquivo_livro);
+    if (result != strlen(linha)) {
         perror("Erro ao escrever no arquivo");
         return false;
     }
@@ -127,42 +126,5 @@ bool escrever_livro(FILE* arquivo_livro, LIVRO* livro)
     return true;
 }
 
-// Funções de pessoas:
-
-PESSOA* ler_pessoa(FILE* arquivo_pessoa, List* lista)
-{
-    /**
-     * Le uma pessoa do arquivo pessoas.txt e retorna um endereco
-     * da pessoa dinamicamente alocado
-     */
-    char linha[LINHA_MAX];
-    if(fgets(linha, sizeof(linha), arquivo_pessoa) == NULL)
-    {
-        return NULL;
-    }
-
-    linha[strcspn(linha, "\n")] = 0;
-
-    char nome[LINHA_MAX/2], cpf[LINHA_MAX/2];
-    int ISBN;
-
-    int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",%d", nome, cpf, &ISBN);
-    printf("CAMPOS LIDOS: %d\n", campos_lidos);
-    if(campos_lidos != 3)
-    {
-        return NULL;
-    }
-
-    LIVRO* livro_desejado = procura_livro_ISBN(lista, &ISBN);
-
-    PESSOA* pessoa = cria_PESSOA(nome, cpf);
-    if(!empresta_Livro(pessoa, livro_desejado))
-    {
-        printf("livro esta indisponivel");
-        return pessoa;
-    }
-    
-    return pessoa;
-}
 #endif // BIBLIOTECA_IMPLEMENTATION
 #endif // BIBLIOTECA_H

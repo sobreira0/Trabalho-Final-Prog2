@@ -82,6 +82,41 @@ bool devolve_Livro(PESSOA *p)
     return true;
 }
 
+PESSOA* ler_pessoa(FILE* arquivo_pessoa, List* lista)
+{
+    /**
+     * Le uma pessoa do arquivo pessoas.txt e retorna um endereco
+     * da pessoa dinamicamente alocado
+     */
+    char linha[LINHA_MAX];
+    if(fgets(linha, sizeof(linha), arquivo_pessoa) == NULL)
+    {
+        return NULL;
+    }
+
+    linha[strcspn(linha, "\n")] = 0;
+
+    char nome[LINHA_MAX/2], cpf[LINHA_MAX/2];
+    char ISBN[ISBN_MAX];
+
+    int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",\"%[^\"]\"", nome, cpf, ISBN);
+    if(campos_lidos != 3)
+    {
+        return NULL;
+    }
+
+    LIVRO* livro_desejado = procura_livro_ISBN(lista, ISBN);
+
+    PESSOA* pessoa = cria_PESSOA(nome, cpf);
+    if(!empresta_Livro(pessoa, livro_desejado))
+    {
+        printf("livro esta indisponivel\n");
+        return pessoa;
+    }
+    
+    return pessoa;
+}
+
 #endif // PESSOA_IMPLEMENTATION
 
 #endif // PESSOA_H

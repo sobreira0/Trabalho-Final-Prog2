@@ -5,7 +5,7 @@
 
 typedef struct node{
     struct node *next;
-    LIVRO livro;
+    LIVRO *livro;
 } Node;
 
 typedef struct {
@@ -14,13 +14,15 @@ typedef struct {
 
 // Funções para manipular a LISTA
 
-bool insert_LISTA(List*, LIVRO, size_t);
+bool insert_LISTA(List*, LIVRO*, size_t);
 bool delete_LISTA(List*, LIVRO*, size_t);
 void print_LISTA(List*);
+void explode_LISTA(List*);
+void inicializa_LISTA(List*);
 
 #ifdef LISTA_IMPLEMENTATION
 
-bool insert_LISTA(List *l, LIVRO data, size_t pos)
+bool insert_LISTA(List *l, LIVRO *data, size_t pos)
 {
     Node* new = (Node *) malloc(sizeof(Node));
     
@@ -98,7 +100,7 @@ bool delete_LISTA(List *l, LIVRO *livro, size_t pos)
         prev->next = temp->next;
     }
 
-    *livro = temp->livro;
+    *livro = *(temp->livro);
     free(temp);
     return true;
 }
@@ -121,7 +123,7 @@ void print_LISTA_disponiveis(List *l)
     Node *n = l->head;
     int i = 1;
     while (n != NULL) {
-        if (n->livro.disponivel) {
+        if (n->livro->disponivel) {
             printf("*---------------------*\n");
             printf("Elemento %d:\n", i);
             print_LIVRO(&(n->livro));  
@@ -137,7 +139,7 @@ LIVRO *procura_livro_ISBN(List *lista, const char *ISBN)
      * Procura livro na lista de acordo com a sua ISBN
      */
     Node *n = lista->head;
-    while (n != NULL && (strcmp(n->livro.isbn, ISBN)) != 0) n = n->next;
+    while (n != NULL && (strcmp(n->livro->isbn, ISBN)) != 0) n = n->next;
     if (n == NULL) {
         #ifdef DEBUG
             print_error(BOOK_NOT_FOUND);
@@ -147,7 +149,24 @@ LIVRO *procura_livro_ISBN(List *lista, const char *ISBN)
         return NULL;
     }
 
-    return &n->livro;
+    return &(n->livro);
+}
+
+void inicializa_LISTA(List *l)
+{
+    l->head = NULL;
+}
+
+void explode_LISTA(List *l)
+{
+    Node *n = l->head;
+    while (n != NULL) {
+        Node *erase = n;
+        n = n->next;
+        free(erase->livro);
+        free(erase);
+    }
+    l->head = NULL;
 }
 
 #endif // LISTA_IMPLEMENTATION

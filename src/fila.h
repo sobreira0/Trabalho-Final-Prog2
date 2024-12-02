@@ -5,7 +5,7 @@
 #include "pessoa.h"
 
 typedef struct ELEMENTO_FILA {
-    PESSOA pessoa;
+    PESSOA *pessoa;
     struct ELEMENTO_FILA* prox;
 } ELEMENTO_FILA;
 
@@ -26,7 +26,7 @@ void inicializarFila(FILA *f)
     f->tamanho = 0;
 }
 
-bool adiciona_FILA(FILA *f, PESSOA p) 
+bool adiciona_FILA(FILA *f, PESSOA *p) 
 {
     ELEMENTO_FILA *novo = (ELEMENTO_FILA*) malloc(sizeof(ELEMENTO_FILA));
     
@@ -68,7 +68,7 @@ bool remove_FILA(FILA *f, PESSOA *p)
 
     f->frente = f->frente->prox;
     ptr->prox = NULL;
-    *p = ptr->pessoa;
+    *p = *(ptr->pessoa);
 
     free(ptr);
 
@@ -85,6 +85,19 @@ bool remove_FILA(FILA *f, PESSOA *p)
 size_t tamanhoFila(FILA *f) 
 {
     return f->tamanho;
+}
+
+void explode_FILA(FILA *f)
+{
+    ELEMENTO_FILA *n = f->frente;
+    while (n != NULL) {
+        ELEMENTO_FILA *erase = n;
+        n = n->prox;
+        free(erase->pessoa);
+        free(erase);
+    }
+    f->frente = NULL;
+    f->tras = NULL;
 }
 
 #endif // FILA_IMPLEMENTATION 
