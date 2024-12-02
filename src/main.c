@@ -17,7 +17,7 @@ int main()
     List livros = {0};
     inicializarFila(&pessoas);
 
-    const char *livros_path = "livros.txt";
+    const char *livros_path = "livros.txt"
     FILE *arquivo_livro = fopen(livros_path, "r+");
     if (arquivo_livro == NULL) 
     {
