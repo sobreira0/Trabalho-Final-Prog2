@@ -6,7 +6,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-                    
+
+#define LINHA_MAX 500
+#define ISBN_MAX 15
+#define TITULO_MAX 100
+#define AUTOR_MAX 100
+
 #ifdef DEBUG
 /**
  * Nossa parte de logging de erros, com algumas contantes
@@ -32,7 +37,7 @@ typedef struct LIVRO
     char *titulo;
     char *autor;
     int ano_publicacao;
-    char isbn[15]; // 13 caracteres para ISBN-13
+    char isbn[ISBN_MAX]; // 13 caracteres para ISBN-13
     bool disponivel;    // true = disponível, falso = emprestado
 } LIVRO;
 
@@ -80,7 +85,7 @@ LIVRO* ler_livro(FILE* arquivo_livro)
      * Le um livro do arquifvo livros.txt e retorna um endereco
      * do livro dinamicamente alocado
      */
-    char linha[500];
+    char linha[LINHA_MAX];
 
     if(fgets(linha, sizeof(linha), arquivo_livro) == NULL)
     {
@@ -89,9 +94,9 @@ LIVRO* ler_livro(FILE* arquivo_livro)
 
     linha[strcspn(linha, "\n")] = 0;
 
-    char titulo[200], autor[200];
+    char titulo[LINHA_MAX/2], autor[LINHA_MAX/2];
     int ano_publicacao;
-    char isbn[15];
+    char isbn[ISBN_MAX];
     int disponivel;
 
     int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",%d,\"%[^\"]\",%d", titulo, autor, &ano_publicacao, isbn, &disponivel);
@@ -104,6 +109,23 @@ LIVRO* ler_livro(FILE* arquivo_livro)
     LIVRO* livro = create_LIVRO(titulo, autor, isbn, ano_publicacao);
 
     return livro;
+}
+
+bool escrever_livro(FILE* arquivo_livro, LIVRO* livro)
+{
+    char *linha = (char*) malloc(LINHA_MAX * sizeof(char));
+    snprintf(linha, LINHA_MAX, "\"%s\",\"%s\",%d,\"%s\"", 
+                        livro->titulo, livro->autor, livro->ano_publicacao, livro->isbn);
+    fseek(arquivo_livro, 0, SEEK_END);
+    int result = fputs(linha, arquivo_livro);
+    if (result == EOF) {
+        perror("Erro ao escrever no arquivo");
+        return false;
+    }
+    puts("Livro cadastrado com sucesso!");
+    free(linha);
+
+    return true;
 }
 #endif // BIBLIOTECA_IMPLEMENTATION
 #endif // BIBLIOTECA_H
