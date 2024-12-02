@@ -125,4 +125,4 @@ Implementa o sistema principal para gerenciar a biblioteca virtual. Passos princ
 
 ---
 
-Esse design modular facilita futuras expansões, como novas funcionalidades ou melhorias na interface do usuário.
+
