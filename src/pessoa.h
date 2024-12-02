@@ -3,6 +3,8 @@
 
 #include "biblioteca.h"
 
+#define NOME_MAX 100
+#define CPF_MAX 100
 typedef struct {
     char *nome;
     char *cpf;
@@ -57,7 +59,7 @@ bool empresta_Livro(PESSOA *p, LIVRO *l)
     p->livro_emprestado = l;
     l->disponivel = false;
     p->count_livros_emprestados++;
-
+    puts("Emprestimo feito com sucesso!");
     return true; 
 }
 
@@ -75,7 +77,8 @@ bool devolve_Livro(PESSOA *p)
 
     p->livro_emprestado->disponivel = true;
     p->livro_emprestado = NULL;
-    p->count_livros_emprestados = 0;
+    p->count_livros_emprestados = 0;\
+    puts("Livro devolvido com sucesso!");
     return true;
 }
 
