@@ -17,14 +17,20 @@ int main()
     List livros = {0};
     inicializarFila(&pessoas);
 
-    const char *livros_path = "./livros.txt";
+    const char *livros_path = "livros.txt"
     FILE *arquivo_livro = fopen(livros_path, "r+");
     if (arquivo_livro == NULL) 
     {
         perror("Erro ao abrir o arquivo");
         return 1;
     }
-
+    const char *pessoa_path = "pessoas.txt";
+    FILE *arquivo_pessoa = fopen(pessoa_path, "r+");
+    if (arquivo_livro == NULL) 
+    {
+        perror("Erro ao abrir o arquivo");
+        return 1;
+    }
     int contador = 0;
 
     // Loop para ler todos os livros até o final do arquivo
@@ -33,6 +39,13 @@ int main()
     {
         insert_LISTA(&livros, *livro, contador);
         contador++;
+    }
+
+    // Loop para ler todos as pessoas até o final do arquivo
+    PESSOA *pessoa;
+    while (( pessoa = ler_pessoa(arquivo_pessoa, &livros)) != NULL)
+    {
+        adiciona_FILA(&pessoas, *pessoa);
     }
     /**
      * Primeira versao do menu, ainda a ser implementado.
