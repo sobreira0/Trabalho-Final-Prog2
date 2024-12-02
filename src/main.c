@@ -17,13 +17,14 @@ int main()
     List livros = {0};
     inicializarFila(&pessoas);
 
-    const char *livros_path = "livros.txt"
+    const char *livros_path = "livros.txt";
     FILE *arquivo_livro = fopen(livros_path, "r+");
     if (arquivo_livro == NULL) 
     {
         perror("Erro ao abrir o arquivo");
         return 1;
     }
+
     const char *pessoa_path = "pessoas.txt";
     FILE *arquivo_pessoa = fopen(pessoa_path, "r+");
     if (arquivo_livro == NULL) 
