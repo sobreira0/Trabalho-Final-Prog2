@@ -100,7 +100,6 @@ LIVRO* ler_livro(FILE* arquivo_livro)
     int disponivel;
 
     int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",%d,\"%[^\"]\"", titulo, autor, &ano_publicacao, isbn);
-    printf("CAMPOS LIDOS: %d\n", campos_lidos);
     if(campos_lidos != 4)
     {
         return NULL;

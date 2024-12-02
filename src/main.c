@@ -37,44 +37,78 @@ int main()
     /**
      * Primeira versao do menu, ainda a ser implementado.
      */
+    
     puts("Digite seu nome:");
-    char nome[100] = {0};
-    scanf("%s", nome);
+    char nome[NOME_MAX] = {0};
+    scanf("%[^\n]", nome);
     puts("Digite seu CPF:");
-    char cpf[100] = {0};
+    char cpf[CPF_MAX] = {0};
     scanf("%s", cpf);
+    getchar();
     PESSOA *p = cria_PESSOA(nome, cpf);
     if(!adiciona_FILA(&pessoas, *p)) return 1;
-    
-    getchar();
+
     char opt = -1;
     while (opt != 'q') {
         puts("<-------------------------------->");
         puts("\tBem vindo a Biblioteca BCC");
         puts("\tDigite 'q' para sair");
         puts("\tEscolha uma opcao:");
-        puts("\t1 - Consultar meu livro emprestado");
+        puts("\t1 - Emprestimo");
         puts("\t2 - Cadastrar livro");
         puts("\t3 - Listar livros em ordem alfabetica de titulo");
+        puts("\t4 - Listar livros disponiveis para emprestimo");
         scanf("%c", &opt);
+        getchar();
         switch (opt)
         {
-        case '1':
-            if (p->livro_emprestado == NULL) puts("Voce nao tem livros emprestados no momento");
-            else print_LIVRO(p->livro_emprestado);
+        case '1': ;
+            puts("\tVoce deseja:");
+            puts("\ta - Pegar emprestado");
+            puts("\tb - Devolver livro");
+            puts("\tc - Ver meu livro emprestado");
+            char d;
+            scanf("%c", &d);
+            switch (d) {
+                case 'a': ;
+                    char ISBN[ISBN_MAX];
+                    puts("Digite a ISBN do livro que deseja pegar emprestado");
+                    scanf("%s", ISBN);
+                    getchar();
+                    LIVRO *livro = procura_livro_ISBN(&livros, ISBN);
+                    if (livro == NULL) 
+                        puts("Nao temos este livro");
+                    else 
+                        empresta_Livro(p, livro);
+                    break;
+                case 'b': 
+                    if (p->livro_emprestado == NULL) 
+                        puts("Voce nao tem livros emprestados no momento");
+                    else 
+                        devolve_Livro(p);
+                    break;
+                case 'c': 
+                    if (p->livro_emprestado == NULL) 
+                        puts("Voce nao tem livros emprestados no momento");
+                    else 
+                        print_LIVRO(p->livro_emprestado);
+                    break;
+            }
+            getchar();
             break;
         case '2': ;
             char titulo[TITULO_MAX], autor[AUTOR_MAX];
             int ano_publicacao;
             puts("Digite o titulo do livro:");
-            scanf("%s", titulo);
+            scanf("%[^\n]", titulo);
             puts("Digite o autor do livro:");
-            scanf("%s", autor);
+            scanf("%[^\n]", autor);
             puts("Digite o ano de lancamento do livro");
             scanf("%d", &ano_publicacao);
             char ISBN[ISBN_MAX];
             puts("Digite a ISBN do livro que deseja pegar emprestado");
             scanf("%s", ISBN);
+            getchar();
             LIVRO *livro = create_LIVRO(titulo, autor, ISBN, ano_publicacao);
             if (livro == NULL) return 1;
             if(!escrever_livro(arquivo_livro, livro)) return 1;
@@ -85,8 +119,10 @@ int main()
             mergeSort_LISTA(&(livros_sorted.head));
             print_LISTA(&livros_sorted);
             break;
+        case '4': ;
+            print_LISTA_disponiveis(&livros);
+            break;
         }
-        getchar();
     } 
 
     fclose(arquivo_livro);
