@@ -80,6 +80,8 @@ bool remove_FILA(FILA *f, PESSOA *p)
     return true;
 }
 
+
+
 size_t tamanhoFila(FILA *f) 
 {
     return f->tamanho;
