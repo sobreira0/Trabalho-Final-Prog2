@@ -42,15 +42,16 @@ typedef struct LIVRO
 } LIVRO;
 
 LIVRO* create_LIVRO(char*, char*, char*, int);
-void print_LIVRO(LIVRO);
+void print_LIVRO(LIVRO*);
 LIVRO* ler_livro(FILE*);
 
 #ifdef BIBLIOTECA_IMPLEMENTATION
 
-void print_LIVRO(LIVRO l)
+void print_LIVRO(LIVRO *l)
 {
+    if (l == NULL) puts("Livro nulo");
     fprintf(stdout, "Titulo: %s\nAutor: %s\nAno de Publicacao: %d\nISBN: %s\nDisponivel? %s\n"
-            , l.titulo, l.autor, l.ano_publicacao, l.isbn, l.disponivel ? "sim" : "nao");
+            , l->titulo, l->autor, l->ano_publicacao, l->isbn, l->disponivel ? "sim" : "nao");
 }
 
 LIVRO* create_LIVRO(char *titulo, char *autor, char *ISBN, int ano)
@@ -86,7 +87,6 @@ LIVRO* ler_livro(FILE* arquivo_livro)
      * do livro dinamicamente alocado
      */
     char linha[LINHA_MAX];
-
     if(fgets(linha, sizeof(linha), arquivo_livro) == NULL)
     {
         return NULL;
@@ -99,9 +99,9 @@ LIVRO* ler_livro(FILE* arquivo_livro)
     char isbn[ISBN_MAX];
     int disponivel;
 
-    int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",%d,\"%[^\"]\",%d", titulo, autor, &ano_publicacao, isbn, &disponivel);
-    
-    if(campos_lidos != 5)
+    int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",%d,\"%[^\"]\"", titulo, autor, &ano_publicacao, isbn);
+    printf("CAMPOS LIDOS: %d\n", campos_lidos);
+    if(campos_lidos != 4)
     {
         return NULL;
     }
