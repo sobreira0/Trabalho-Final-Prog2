@@ -3,6 +3,7 @@
 #define UTILS_IMPLEMENTATION
 #define FILA_IMPLEMENTATION
 #define PESSOA_IMPLEMENTATION
+#define DEBUG
 
 #include "biblioteca.h"
 #include "lista.h"
@@ -56,7 +57,7 @@ int main()
         puts("\tDigite 'q' para sair");
         puts("\tEscolha uma opcao:");
         puts("\t1 - Consultar meu livro emprestado");
-        puts("\t2 - Pegar livro emprestado");
+        puts("\t2 - Cadastrar livro");
         puts("\t3 - Listar livros em ordem alfabetica de titulo");
         scanf("%c", &opt);
         switch (opt)
@@ -66,12 +67,20 @@ int main()
             else print_LIVRO(*p->livro_emprestado);
             break;
         case '2': ;
-            char ISBN[15];
+            char titulo[TITULO_MAX], autor[AUTOR_MAX];
+            int ano_publicacao;
+            puts("Digite o titulo do livro:");
+            scanf("%s", titulo);
+            puts("Digite o autor do livro:");
+            scanf("%s", autor);
+            puts("Digite o ano de lancamento do livro");
+            scanf("%d", &ano_publicacao);
+            char ISBN[ISBN_MAX];
             puts("Digite a ISBN do livro que deseja pegar emprestado");
             scanf("%s", ISBN);
-            LIVRO *livro = procura_livro_ISBN(&livros, ISBN);
-            if (livro == NULL) puts("Nao temos este livro");
-            else empresta_Livro(p, livro);
+            LIVRO *livro = create_LIVRO(titulo, autor, ISBN, ano_publicacao);
+            if (livro == NULL) return 1;
+            if(!escrever_livro(arquivo_livro, livro)) return 1;
             break;
         case '3': ;
             List livros_sorted;
@@ -82,6 +91,8 @@ int main()
         }
         getchar();
     } 
+
+    fclose(arquivo_livro);
 
     return 0;
 }
