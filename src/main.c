@@ -16,6 +16,7 @@ int main()
     FILA pessoas = {0};
     List livros = {0};
     inicializarFila(&pessoas);
+    inicializa_LISTA(&livros);
 
     const char *livros_path = "livros.txt";
     FILE *arquivo_livro = fopen(livros_path, "r+");
@@ -148,5 +149,7 @@ int main()
 
     fclose(arquivo_livro);
     fclose(arquivo_pessoa);
+    explode_LISTA(&livros);
+    explode_FILA(&pessoas);
     return 0;
 }
