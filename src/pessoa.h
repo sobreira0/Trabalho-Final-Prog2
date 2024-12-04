@@ -108,12 +108,8 @@ PESSOA* ler_pessoa(FILE* arquivo_pessoa, List* lista)
     LIVRO* livro_desejado = procura_livro_ISBN(lista, ISBN);
 
     PESSOA* pessoa = cria_PESSOA(nome, cpf);
-    if(!empresta_Livro(pessoa, livro_desejado))
-    {
-        printf("livro esta indisponivel\n");
-        return pessoa;
-    }
-    
+
+    empresta_Livro(pessoa, livro_desejado);
     return pessoa;
 }
 
