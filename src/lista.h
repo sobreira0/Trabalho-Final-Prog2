@@ -112,7 +112,7 @@ void print_LISTA(List *l)
     while (n != NULL) {
         printf("*---------------------*\n");
         printf("Elemento %d:\n", i);
-        print_LIVRO(&(n->livro));  
+        print_LIVRO(n->livro);  
         n = n->next;
         i++;
     }
@@ -126,7 +126,7 @@ void print_LISTA_disponiveis(List *l)
         if (n->livro->disponivel) {
             printf("*---------------------*\n");
             printf("Elemento %d:\n", i);
-            print_LIVRO(&(n->livro));  
+            print_LIVRO(n->livro);  
             i++;
         }
         n = n->next;
@@ -149,7 +149,7 @@ LIVRO *procura_livro_ISBN(List *lista, const char *ISBN)
         return NULL;
     }
 
-    return &(n->livro);
+    return n->livro;
 }
 
 void inicializa_LISTA(List *l)
