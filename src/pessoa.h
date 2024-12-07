@@ -99,6 +99,10 @@ PESSOA* ler_pessoa(FILE* arquivo_pessoa, List* lista)
     char nome[LINHA_MAX/2], cpf[LINHA_MAX/2];
     char ISBN[ISBN_MAX];
 
+    /**
+     * this line is pure black magic
+     * jk, just evil regex
+     */
     int campos_lidos = sscanf(linha, "\"%[^\"]\",\"%[^\"]\",\"%[^\"]\"", nome, cpf, ISBN);
     if(campos_lidos != 3)
     {

@@ -136,6 +136,10 @@ int main()
             if(!escrever_livro(arquivo_livro, livro)) return 1;
             break;
         case '3': ;
+        /**
+         * criei uma nova lista e copiei toda a memoria para
+         * nao mexer na lista original
+         */
             List livros_sorted;
             memcpy(&livros_sorted, &livros, sizeof(List));
             mergeSort_LISTA(&(livros_sorted.head));
